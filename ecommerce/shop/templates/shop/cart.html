@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block body %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="card">
+            <div class="card-header">
+                <a class="btn btn-outline-dark text-uppercase" href="{% url 'ShopHome'%}">&#x2190; Continue Shopping</a>
+                <div class="row mt-3">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <h5>Items: <strong>{{order.get_cart_items}}</strong></h5>
+                            </th>
+                            <th>
+                                <h5>Total: <strong>Rs {{order.get_cart_total|floatformat:2}}</strong></h5>
+                            </th>
+                            <th>
+                                <a style="float: right;" class="btn btn-success text-uppercase"
+                                    href="{% url 'clearcart' %}">ClearCart</a>
+                            </th>
+                            <th>
+                                <a style="float: right;" class="btn btn-primary text-uppercase"
+                                    href="{% url 'Checkout' %}">Checkout</a>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="card body mt-3 table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <td><strong>Image</strong></td>
+                            <td><strong>Item</strong></td>
+                            <td><strong>Price</strong></td>
+                            <td><strong>Quantity</strong></td>
+                            <td><strong>Total</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>                            
+                                <td><img src="/media/{{item.product.image}}" alt="" class="img-fluid" height="100" width="100"></td>
+                                <td>{{item.product.product_name}}</td>
+                                <td>Rs {{item.product.price|floatformat:2}}</td>
+                                <td>
+                                  <button data-product="{{item.product.id}}" data-action="add" class=" btn btn-primary btn-sm update-cart" style="margin: -3px;"><strong>+</strong></button>
+                                  {{item.qunatity}}
+                                  <button data-product="{{item.product.id}}" data-action="remove" class=" btn btn-primary btn-sm update-cart" style="margin: -3px;"><strong>-</strong></button>
+                                </td>
+                                <td>Rs {{item.get_total}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+       </div>
+    </div>
+</div>
+{% endblock  %}

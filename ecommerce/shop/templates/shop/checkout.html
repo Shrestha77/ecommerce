@@ -1,0 +1,142 @@
+{% extends 'layouts/base.html' %}
+    {% block css %}
+    <style>
+        .hidden{
+          display: none;
+        }
+    </style>
+    {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col border">
+            <div class="box-element" id="form-wrapper">
+                <form id="form">
+                    <div id="shipping-info">
+                        <hr>
+                        <p>Shipping Information:</p>
+                        <hr>
+                        <div class="form-field mt-2">
+                            <input class="form-control" type="text" name="address" placeholder="Address..">
+                        </div>
+                        <div class="form-field mt-2">
+                            <input class="form-control" type="text" name="city" placeholder="City..">
+                        </div>
+                        <div class="form-field mt-2">
+                            <input class="form-control" type="text" name="district" placeholder="District..">
+                        </div>
+                       
+                    </div>
+                    <hr>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+
+                    <div class="box-element hidden" id="payment-info">
+                        <small>Payment  Options</small>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                               COD
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Pay Online
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-primary"  id="conform">Conform</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="col border">
+            <div class="box-element">
+                <a  class="btn btn-outline-dark mt-2" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+				<hr>
+				<h3>Order Summary</h3>
+				<hr>
+                {% for item in items %}
+                    <div class="row">
+                        <div class="col"><img src="/media/{{item.product.image}}" alt="" class="img-fluid" height="70" width="70"></div>
+                        <div class="col"><p>{{item.product.product_name}}</p></div>
+                        <div class="col"><p>Rs {{item.product.price|floatformat:2}}</p></div>
+                        <div class="col"><p>x{{item.qunatity}}</p></div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                <div class=" mt-5">
+                    <h5>Items: {{order.get_cart_items}}</h5>
+                    <h5>Total: {{order.get_cart_total|floatformat:2}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+           
+{% endblock  %}
+{% block js %}
+<script>
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total}}'
+    
+    
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function(e){
+        e.preventDefault()
+        document.getElementById('form-button').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
+    })
+
+    document.getElementById('conform').addEventListener('click', function(e){
+        submitFormData()
+    })
+    function submitFormData(){
+
+        var userFormData = {
+            'total': total,
+        }
+        var shippingInfo = {
+            'address':null,
+            'city':null,
+            'district':null,
+            'zipcode':null,
+        }
+
+        if(shipping != 'False'){
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.district = form.district.value
+        }
+        if(user == 'AnonymousUser'){
+        }
+
+        var url = '/shop/process_order/'
+
+        fetch(url,{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({'form': userFormData, 'shipping': shippingInfo})
+        })
+       .then((response) =>{
+            return response.json()
+        })
+        .then((data) =>{
+            alert('Transaction completed your order id is {{order.id}}');
+            window.location.href = "{% url 'ShopHome'%}"
+        })
+        }
+
+    window.onload = function() {
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload();
+        }
+    }
+
+</script>
+{% endblock  %}

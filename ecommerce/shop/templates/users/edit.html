@@ -1,0 +1,39 @@
+{% extends 'layouts/base.html' %}
+{% block body %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="card">
+            <div class="card-header">
+                <a href="{% url 'user.profile' %}" class="btn btn-primary text-uppercase">Back</a>
+            </div>
+            <div class="card-body">
+                {% if success %}<div class="alert alert-success" role="alert">{{ success }}</div>{% endif %}
+                <form action="{% url 'user.profileupdate' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="user_name">UserName</label>
+                        <input type="text" name="user_name" value="{{ user.user_name }}" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="first_name">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name}}" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="contact">Phone Number</label>
+                        <input type="text" name="contact" value="{{ user.contact }}" class="form-control">
+                    </div>
+                    <div class=" form-group mb-3">
+                        <label for="formFile" class="form-label">Profile Pic</label>
+                        <input class="form-control" type="file" name="profile" value="{{user.profile}}">
+                    </div>
+                    <input type="submit" value="Update" class="btn btn-primary text-uppercase mt-2">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

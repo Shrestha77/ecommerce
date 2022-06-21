@@ -1,0 +1,42 @@
+{% extends 'layouts/base.html' %}
+{% block css %}
+<style>
+    .card-img-top {
+        width: 250px;
+        height: 250px;
+    }
+</style>
+{% endblock  %}
+{% block body %}
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+                 {% for product in prod%}
+                    <div class="col-xs-3 col-sm-3 col-md-3 my-4">
+                        <div class="card align-items-center" style="width: 18rem;">
+                            <img src='/media/{{product.image}}' class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{product.product_name}}</h5>
+                                <p class="card-text">{{product.description|slice:"0:53"}}..<a class="text-decoration-none"
+                                        href="/shop/products/{{i.id}} ">></a></p>
+                                <h6>RS: {{product.price}}</h6>
+                                <button data-product="{{product.id}}" data-action="add" class="btn btn-primary update-cart">Add To
+                                    Cart</button>
+                                <a href="/shop/products/{{product.id}} "> <button id="{{product.id}}" class="btn btn-primary cart">Quick
+                                        View</button></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    </div> 
+ </div>
+{% endblock  %}
+{% block js %}
+<script>
+{%if msg|length != 0 %}
+alert('{{msg}}');
+window.location.href="/"
+{% endif %}
+</script>
+{% endblock %}

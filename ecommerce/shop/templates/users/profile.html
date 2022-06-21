@@ -1,0 +1,49 @@
+{% extends 'layouts/base.html' %}
+{% block body %}
+<div class="container">
+    <div class="row mt-3">
+       {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>{{message}}</strong> 
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                    width="150px" src="/media/{{user.profile}}"><span
+                    class="font-weight-bold">{{user.user_name}}</span><span
+                    class="text-black-50">Email: {{user.email}}</span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3> Profile </h3>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Name</label>
+                        <p>{{user.first_name}}</p>
+                    </div>
+                    <div class="col-md-6"><label class="labels">Last Name</label>
+                        <p>{{user.last_name}}</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label>
+                        <p>{{user.contact}}</p>
+                    </div>
+                    <div class="col-md-12"><label class="labels">Address </label>
+                        <p>{{user.Customer.address}}</p>
+                    </div>
+                    <div class="col-md-12 my-3"><label class="labels"></label>
+                        <a href="{% url 'password_change' %}" class="btn btn-primary profile-button" type="button">Change Password</a>
+                    </div>
+                    <div class="col-md-12 "><label class="labels"></label>
+                        <a href=" {% url 'user.profileedit'%} "
+                        class="btn btn-primary profile-button" type="button">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
